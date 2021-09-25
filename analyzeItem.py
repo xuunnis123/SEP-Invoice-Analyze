@@ -30,9 +30,6 @@ class Locations:
         assert location in location_list, "沒有此地區"
         self.__count[location] += 1
 
-    def getCount(self, location):
-        return self.__count[location]
-
     def getPlaceList(self):
         return list(self.__count.keys())
 
