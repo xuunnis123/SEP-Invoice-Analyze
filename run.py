@@ -30,16 +30,10 @@ timechoose=['10401','10403','10405','10407','10409','10411','10501','10503','105
 analyze_1000 = AnalyzeItem(1000)
 analyze_200 = AnalyzeItem(200)
 analyzeItem_list =[analyze_1000, analyze_200]
-# devide_all1000={}
-# devide_all200={}
 
 def collect_and_devide(shot,start,end):
     analyze_1000.update(shot)
     analyze_200.update(shot)
-  
-    # 視窗下面的項目table
-    
-    
 
     # 計算每個縣市的中獎次數
     if start==end:
@@ -85,8 +79,6 @@ if __name__ == '__main__':
         shot1_label.config(text = "開始區間:")
         shot2=""
         shot2_label.config(text = "結束區間:")
-        # devide_all1000={}
-        # devide_all200={}
         T1.delete(0.0,END)
         T2.delete(0.0,END)
 
@@ -95,7 +87,6 @@ if __name__ == '__main__':
                 shot1 = timechoose[0]
             if shot2 == '':
                 shot2 = timechoose[-1]
-            # global devide_all1000,devide_all200
             try:
                 start = timechoose.index(shot1)
                 end = timechoose.index(shot2)
@@ -108,8 +99,6 @@ if __name__ == '__main__':
             while start<=end:   
                 with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:   
                     executor.map(collect_and_devide(timechoose[start],start,end))
-                    # devide_all1000.update(devide_all1000)
-                    # devide_all200.update(devide_all200)
                 start+=1
             over=time.time()
             print("time:",over-begin)
@@ -195,6 +184,7 @@ if __name__ == '__main__':
         output2="{}:{}\n".format(i[0],i[1])
         T2.insert(END,output2)  
 
+    # Menu
     menu=Menu(root)    
     filemenu=Menu(menu)
     menu.add_cascade(label="操作模式",menu=filemenu)

@@ -131,4 +131,4 @@ class AnalyzeItem:
                     break
                 # 正常
                 if addr.find(i) !=-1:
-                    locate.addCount(str(i))  
+                    locate.addCount(str(i)) 
