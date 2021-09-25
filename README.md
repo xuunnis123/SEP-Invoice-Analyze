@@ -24,3 +24,5 @@ for Windows: `invoiceEnv\scripts\activate`
 
 執行 `python run.py`
 
+
+Written by @xuunnis123
