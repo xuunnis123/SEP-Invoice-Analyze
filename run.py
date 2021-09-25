@@ -22,7 +22,6 @@ from tkinter import Tk, Label,Text, Button, Entry, IntVar, END,W,E,N,S,messagebo
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 # 分出來的部分
-from wintimes import Wintimes
 from analyzeItem import AnalyzeItem
 
 locate1000_count_data=[]
