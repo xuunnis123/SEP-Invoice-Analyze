@@ -43,6 +43,72 @@ def collect_and_devide(shot,start,end):
         view.line_chart(analyzeItem_list)        
     return analyze_1000.locate().count(), analyze_200.locate().count()
       
+def fun_shot1(add):
+    global shot1,shot1_label
+    if len(add)==2: #月份
+        assert len(shot1)==3, "先選年份"
+        shot1+=add
+    else:
+        shot1=add
+    shot1_label.config(text = f"開始區間:{shot1}")
+
+def fun_shot2(add):
+    global shot2,shot2_label
+    if len(add)==2: #月份
+        assert len(shot2)==3, "先選年份"
+        shot2+=add
+    else:
+        shot2=add
+    shot2_label.config(text = f"結束區間:{shot2}")
+
+def reset(shot1_label, shot2_label):
+    global shot1,shot2,analyze_1000,analyze_200,analyzeItem_list
+    shot1=""
+    shot1_label.config(text = "開始區間:")
+    shot2=""
+    shot2_label.config(text = "結束區間:")
+    T1.delete(0.0,END)
+    T2.delete(0.0,END)
+    analyze_1000 = AnalyzeItem(1000)
+    analyze_200 = AnalyzeItem(200)
+    analyzeItem_list =[analyze_1000, analyze_200]
+
+
+def sure(shot1,shot2):
+    global analyze_1000,analyze_200,analyzeItem_list
+    analyze_1000 = AnalyzeItem(1000)
+    analyze_200 = AnalyzeItem(200)
+    analyzeItem_list =[analyze_1000, analyze_200]
+    T1.delete(0.0,END)
+    T2.delete(0.0,END)
+    if shot1 == '':
+        shot1 = timechoose[0]
+    if shot2 == '':
+        shot2 = timechoose[-1]
+    try:
+        start = timechoose.index(shot1)
+        end = timechoose.index(shot2)
+    except ValueError:
+        assert False, "請選擇正確的時間"
+    
+    assert start !=-1 and end !=-1 and start<=end, "選擇區間不正確"
+
+    begin=time.time()     
+    while start<=end:   
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:   
+            executor.map(collect_and_devide(timechoose[start],start,end))
+        start+=1
+    over=time.time()
+    print("time:",over-begin)
+    # 項目清單
+    finalitemlist1000=list(sorted(analyze_1000.item().items(),key=lambda item:item[1],reverse=True))  
+    for i in finalitemlist1000:
+        output1="{}:{}\n".format(i[0],i[1])
+        T1.insert(END,output1)
+    finalitemlist200 = list(sorted(analyze_200.item().items(),key=lambda item:item[1],reverse=True))
+    for i in finalitemlist200:
+        output2="{}:{}\n".format(i[0],i[1])
+        T2.insert(END,output2)  
 
 ### 視窗 ###
 if __name__ == '__main__':
@@ -54,55 +120,6 @@ if __name__ == '__main__':
     shot1_label.place(x=40,y=40)
     shot2_label = Label(root,text="結束區間:",bg="#FFFFBB")
     shot2_label.place(x=40,y=60)
-
-    def fun_shot1(add):
-        global shot1,shot1_label
-        if len(add)==2: #月份
-            assert len(shot1)==3, "先選年份"
-            shot1+=add
-        else:
-            shot1=add
-        shot1_label.config(text = f"開始區間:{shot1}")
-
-    def fun_shot2(add):
-        global shot2,shot2_label
-        if len(add)==2: #月份
-            assert len(shot2)==3, "先選年份"
-            shot2+=add
-        else:
-            shot2=add
-        shot2_label.config(text = f"結束區間:{shot2}")
-
-    def reset(shot1_label, shot2_label):
-        global shot1,shot2
-        shot1=""
-        shot1_label.config(text = "開始區間:")
-        shot2=""
-        shot2_label.config(text = "結束區間:")
-        T1.delete(0.0,END)
-        T2.delete(0.0,END)
-
-    def sure(shot1,shot2):
-            if shot1 == '':
-                shot1 = timechoose[0]
-            if shot2 == '':
-                shot2 = timechoose[-1]
-            try:
-                start = timechoose.index(shot1)
-                end = timechoose.index(shot2)
-            except ValueError:
-                assert False, "請選擇正確的時間"
-            
-            assert start !=-1 and end !=-1 and start<=end, "選擇區間不正確"
-        
-            begin=time.time()     
-            while start<=end:   
-                with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:   
-                    executor.map(collect_and_devide(timechoose[start],start,end))
-                start+=1
-            over=time.time()
-            print("time:",over-begin)
-    
 
     start_label=Label(text="選出開始的區間:",bg="#FFFFBB")
     start_label.place(x=40, y= 80)   
@@ -171,25 +188,10 @@ if __name__ == '__main__':
     T1=Text(root,height=15,width=20,bg="#FFFFBB")
     T1.place(x=40,y=250)
     Label(root,text="1000萬獎項交易項目：",bg="#FFFFBB").place(x=40,y=220)
-    finalitemlist1000=list(sorted(analyze_1000.item().items(),key=lambda item:item[1],reverse=True))  
-    for i in finalitemlist1000:
-        output1="{}:{}\n".format(i[0],i[1])
-        T1.insert(END,output1)
 
     T2=Text(root,height=15,width=20,bg="#FFFFBB")
     T2.place(x=260,y=250)
     Label(root,text="200萬獎項交易項目：",bg="#FFFFBB").place(x=260,y=220)
-    finalitemlist200 = list(sorted(analyze_200.item().items(),key=lambda item:item[1],reverse=True))
-    for i in finalitemlist200:
-        output2="{}:{}\n".format(i[0],i[1])
-        T2.insert(END,output2)  
 
-    # Menu
-    menu=Menu(root)    
-    filemenu=Menu(menu)
-    menu.add_cascade(label="操作模式",menu=filemenu)
-    filemenu.add_command(label="Exit",command=root.quit)
-    
-    root.config(menu=menu)
     root.mainloop()
     root.destroy()
