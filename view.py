@@ -7,7 +7,7 @@ from analyzeItem import AnalyzeItem
 ### 折線圖 ###
 def line_chart(analyzeItem_list):
 
-    font = FontProperties(fname='./STHeiti Medium.ttc',size=10)
+    font = FontProperties(fname='./STHeiti Medium.ttc',size=9)
 
     all_locate_list = [] # e.g. [{"臺北市":5, ...}, {"臺北市":2, ...}]
     all_locate_count_data = []  # e.g. [[5, ...], [2, ...]]
@@ -46,13 +46,13 @@ def line_chart(analyzeItem_list):
         label= str( _.prize()) + '萬特別獎中獎曲線'
         all_label.append(label)
 
-
-    f = plt.figure(figsize=(12,5))
+    f = plt.figure(figsize=(8,3.5))
     plt.rcParams['axes.facecolor'] = '#FFFFBB'
+    plt.tick_params(axis='x', which='major', labelsize=1)
+    plt.tight_layout()
 
     for i in range(len(all_data)):
         plt.plot(np.arange(all_data[i].shape[0]), all_data[i], label=all_label[i])
-
     plt.xticks(np.arange(all_data[0].shape[0]),['基隆市','臺北市','新北市','桃園市','新竹市','新竹縣','苗栗縣','臺中市','彰化縣','雲林縣','南投縣','嘉義縣','嘉義市','臺南市','高雄市','屏東縣','宜蘭縣','花蓮縣','臺東縣','澎湖縣','金門縣','連江縣'],fontproperties=font)    #,fontproperties=font
     plt.yticks(np.arange(maxdata+1),timenumber,fontproperties=font)    #fontproperties=font
     plt.legend(loc='upper right',prop=font) #prop=font
@@ -60,12 +60,12 @@ def line_chart(analyzeItem_list):
     plt.xlabel('縣市',fontproperties=font)  #fontproperties=font
     plt.ylabel('次數',fontproperties=font)  #fontproperties=font
     plt.savefig("final.png")
-    plt.show()
+    # plt.show()
     
     #im=PhotoImage(file="final.png")
     
-    canvas = FigureCanvasTkAgg(f, master=root)
-    canvas.show()
-    canvas.get_tk_widget().place(x=440,y=40)
+    canvas = FigureCanvasTkAgg(f)
+    # canvas.show()
+    canvas.get_tk_widget().place(x=470,y=100)
     # = Label(root, imag=im)
     #img_label.pack(row=11)
