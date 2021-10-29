@@ -114,7 +114,7 @@ def sure(shot1,shot2):
 if __name__ == '__main__':
     root=Tk()
     root.geometry('1300x500')
-    root.title("季陽統一發票統計系統")
+    root.title("統一發票統計系統")
     root.configure(background='#FFFFBB')
     shot1_label = Label(root,text="開始區間:",bg="#FFFFBB")
     shot1_label.place(x=40,y=40)

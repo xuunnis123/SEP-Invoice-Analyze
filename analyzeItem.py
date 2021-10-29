@@ -82,7 +82,7 @@ class AnalyzeItem:
             h_id = '2'
         else:
             assert True, "目前只提供200萬、1000萬的獎項分析功能"
-
+        print("table=",table)
         save = table.find_all('tr')
         save_company = table.findAll('td',{'headers':'companyname'+h_id})
         save_address = table.findAll('td',{'headers':'companyAddress'+h_id})
